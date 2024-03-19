@@ -23,7 +23,7 @@ export default async function Nav() {
               href="/"
               className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
             >
-              Medusa Store
+              LookUp Store
             </LocalizedClientLink>
           </div>
 
@@ -35,14 +35,14 @@ export default async function Nav() {
                   href="/search"
                   scroll={false}
                 >
-                  Search
+                  Pesquisar
                 </LocalizedClientLink>
               )}
               <LocalizedClientLink
                 className="hover:text-ui-fg-base"
                 href="/account"
               >
-                Account
+                Minha Conta
               </LocalizedClientLink>
             </div>
             <Suspense
@@ -51,7 +51,7 @@ export default async function Nav() {
                   className="hover:text-ui-fg-base flex gap-2"
                   href="/cart"
                 >
-                  Cart (0)
+                  Carrinho (0)
                 </LocalizedClientLink>
               }
             >
