@@ -2,7 +2,7 @@
 
 import { Popover, Transition } from "@headlessui/react"
 import { ArrowRightMini, XMark } from "@medusajs/icons"
-import { Region } from "@medusajs/medusa"
+import { Cart, Region } from "@medusajs/medusa"
 import { Text, clx, useToggleState } from "@medusajs/ui"
 import { Fragment } from "react"
 
@@ -10,15 +10,16 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CountrySelect from "../country-select"
 
 const SideMenuItems = {
-  Home: "/",
-  Store: "/store",
-  Search: "/search",
-  Account: "/account",
-  Cart: "/cart",
+ "Início": "/",
+  Loja: "/store",
+  Pesquisar: "/search",
+  "Minha Conta": "/account",
+  Carrinho: "/cart",
 }
 
 const SideMenu = ({ regions }: { regions: Region[] | null }) => {
   const toggleState = useToggleState()
+  const moreThanOneRegion = Array.isArray(regions) && regions.length > 1
 
   return (
     <div className="h-full">
@@ -70,22 +71,24 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
                         onMouseEnter={toggleState.open}
                         onMouseLeave={toggleState.close}
                       >
-                        {regions && (
+                        {moreThanOneRegion && (
+                          <>
                           <CountrySelect
                             toggleState={toggleState}
                             regions={regions}
                           />
-                        )}
-                        <ArrowRightMini
+                          <ArrowRightMini
                           className={clx(
                             "transition-transform duration-150",
                             toggleState.state ? "-rotate-90" : ""
                           )}
-                        />
+                          />
+                        </>
+                        )}
+    
                       </div>
                       <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights
-                        reserved.
+                        © {new Date().getFullYear()} LookUp Store. Todos os direitos reservados.
                       </Text>
                     </div>
                   </div>
