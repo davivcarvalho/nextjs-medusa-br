@@ -77,9 +77,7 @@ export default async function Footer() {
             )}
             {collections && collections.length > 0 && (
               <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Coleções
-                </span>
+                <span className="txt-small-plus txt-ui-fg-base">Coleções</span>
                 <ul
                   className={clx(
                     "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small",
@@ -102,7 +100,9 @@ export default async function Footer() {
               </div>
             )}
             <div className="flex flex-col gap-y-2">
-              <span className="txt-small-plus txt-ui-fg-base">Institucional</span>
+              <span className="txt-small-plus txt-ui-fg-base">
+                Institucional
+              </span>
               <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
                 <li>
                   <a
@@ -168,14 +168,15 @@ export default async function Footer() {
                   >
                     Instagram
                   </a>
-                </li>           
+                </li>
               </ul>
             </div>
           </div>
         </div>
         <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
           <Text className="txt-compact-small">
-            © {new Date().getFullYear()} LookUp Store. Todos os direitos reservados.
+            © {new Date().getFullYear()} LookUp Store. Todos os direitos
+            reservados.
           </Text>
           <MedusaCTA />
         </div>
