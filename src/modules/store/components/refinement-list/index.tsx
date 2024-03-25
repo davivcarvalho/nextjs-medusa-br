@@ -31,7 +31,7 @@ const RefinementList = ({ sortBy }: RefinementListProps) => {
   }
 
   return (
-    <div className="flex small:flex-col gap-12 py-4 mb-8 small:px-0 pl-6 small:min-w-[250px] small:ml-[1.675rem]">
+    <div className="flex small:flex-col gap-12 py-4 mt-8 small:px-0 pl-6 small:min-w-[250px] small:ml-[1.675rem] justify-end">
       <SortProducts sortBy={sortBy} setQueryParams={setQueryParams} />
     </div>
   )
