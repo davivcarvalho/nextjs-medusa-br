@@ -81,7 +81,7 @@ const CartDropdown = ({
           <LocalizedClientLink
             className="hover:text-ui-fg-base"
             href="/cart"
-          >{`Cesto (${totalItems})`}</LocalizedClientLink>
+          >{`Carrinho (${totalItems})`}</LocalizedClientLink>
         </Popover.Button>
         <Transition
           show={cartDropdownOpen}
@@ -98,7 +98,7 @@ const CartDropdown = ({
             className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base"
           >
             <div className="p-4 flex items-center justify-center">
-              <h3 className="text-large-semi">Cesto de Compras</h3>
+              <h3 className="text-large-semi">Carrinho de Compras</h3>
             </div>
             {cartState && cartState.items?.length ? (
               <>
@@ -151,8 +151,7 @@ const CartDropdown = ({
                 <div className="p-4 flex flex-col gap-y-4 text-small-regular">
                   <div className="flex items-center justify-between">
                     <span className="text-ui-fg-base font-semibold">
-                      Subtotal{" "}
-                      <span className="font-normal">(excl. taxes)</span>
+                      Subtotal
                     </span>
                     <span className="text-large-semi">
                       {formatAmount({
@@ -164,7 +163,7 @@ const CartDropdown = ({
                   </div>
                   <LocalizedClientLink href="/cart" passHref>
                     <Button className="w-full" size="large">
-                      Ir para o cesto
+                      Ir para o carrinho
                     </Button>
                   </LocalizedClientLink>
                 </div>
@@ -172,7 +171,7 @@ const CartDropdown = ({
             ) : (
               <div>
                 <div className="flex py-16 flex-col gap-y-4 items-center justify-center">
-                  <span>O seu cesto de compras está vazio.</span>
+                  <span>O seu carrinho está vazio.</span>
                   <div>
                     <LocalizedClientLink href="/store">
                       <>

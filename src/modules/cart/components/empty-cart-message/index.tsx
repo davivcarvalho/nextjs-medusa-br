@@ -9,10 +9,11 @@ const EmptyCartMessage = () => {
         level="h1"
         className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
       >
-        Cesto de Compras
+        Carrinho de Compras
       </Heading>
       <Text className="text-base-regular mt-4 mb-6 max-w-[32rem]">
-        Você não tem nada em seu carrinho. Vamos mudar isso, use o link abaixo para começar a navegar em nossos produtos.
+        Você não tem nada em seu carrinho. Vamos mudar isso, use o link abaixo
+        para começar a navegar em nossos produtos.
       </Text>
       <div>
         <InteractiveLink href="/store">Explorar os produtos</InteractiveLink>
