@@ -50,7 +50,7 @@ const StripePaymentButton = ({
 
   const onPaymentCompleted = async () => {
     await placeOrder().catch(() => {
-      setErrorMessage("An error occurred, please try again.")
+      setErrorMessage("Ocorreu um erro desconhecido, tente novamente.")
       setSubmitting(false)
     })
   }
@@ -127,7 +127,7 @@ const StripePaymentButton = ({
         size="large"
         isLoading={submitting}
       >
-        Place order
+        Finalizar Pedido
       </Button>
       <ErrorMessage error={errorMessage} />
     </>
@@ -146,7 +146,7 @@ const PayPalPaymentButton = ({
 
   const onPaymentCompleted = async () => {
     await placeOrder().catch(() => {
-      setErrorMessage("An error occurred, please try again.")
+      setErrorMessage("Ocorreu um erro desconhecido, tente novamente.")
       setSubmitting(false)
     })
   }
@@ -161,13 +161,13 @@ const PayPalPaymentButton = ({
       ?.authorize()
       .then((authorization) => {
         if (authorization.status !== "COMPLETED") {
-          setErrorMessage(`An error occurred, status: ${authorization.status}`)
+          setErrorMessage(`Ocorreu um erro, status: ${authorization.status}`)
           return
         }
         onPaymentCompleted()
       })
       .catch(() => {
-        setErrorMessage(`An unknown error occurred, please try again.`)
+        setErrorMessage(`Ocorreu um erro desconhecido, tente novamente.`)
         setSubmitting(false)
       })
   }
