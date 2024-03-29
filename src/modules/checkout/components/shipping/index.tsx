@@ -76,7 +76,7 @@ const Shipping: React.FC<ShippingProps> = ({
             }
           )}
         >
-          Entrega
+          Envio
           {!isOpen && cart.shipping_methods.length > 0 && <CheckCircleSolid />}
         </Heading>
         {!isOpen &&
