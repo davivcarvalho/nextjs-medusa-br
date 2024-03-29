@@ -97,39 +97,39 @@ const EditAddress: React.FC<EditAddressProps> = ({
         </div>
         <div className="flex items-center gap-x-4">
           <button
-            className="text-small-regular text-ui-fg-base flex items-center gap-x-2"
+            className="text-small-regular text-ui-fg-base flex items-center gap-x-1"
             onClick={open}
           >
             <Edit />
-            Edit
+            Editar
           </button>
           <button
-            className="text-small-regular text-ui-fg-base flex items-center gap-x-2"
+            className="text-small-regular text-ui-fg-base flex items-center gap-x-1 text-red-500 "
             onClick={removeAddress}
           >
             {removing ? <Spinner /> : <Trash />}
-            Remove
+            Remover
           </button>
         </div>
       </div>
 
       <Modal isOpen={state} close={close}>
         <Modal.Title>
-          <Heading className="mb-2">Edit address</Heading>
+          <Heading className="mb-2">Editar Endereço</Heading>
         </Modal.Title>
         <form action={formAction}>
           <Modal.Body>
             <div className="grid grid-cols-1 gap-y-2">
               <div className="grid grid-cols-2 gap-x-2">
                 <Input
-                  label="First name"
+                  label="Nome"
                   name="first_name"
                   required
                   autoComplete="given-name"
                   defaultValue={address.first_name || undefined}
                 />
                 <Input
-                  label="Last name"
+                  label="Sobrenome"
                   name="last_name"
                   required
                   autoComplete="family-name"
@@ -137,34 +137,28 @@ const EditAddress: React.FC<EditAddressProps> = ({
                 />
               </div>
               <Input
-                label="Company"
-                name="company"
-                autoComplete="organization"
-                defaultValue={address.company || undefined}
-              />
-              <Input
-                label="Address"
+                label="Endereço"
                 name="address_1"
                 required
                 autoComplete="address-line1"
                 defaultValue={address.address_1 || undefined}
               />
               <Input
-                label="Apartment, suite, etc."
+                label="Complemento: Apto, casa, etc."
                 name="address_2"
                 autoComplete="address-line2"
                 defaultValue={address.address_2 || undefined}
               />
               <div className="grid grid-cols-[144px_1fr] gap-x-2">
                 <Input
-                  label="Postal code"
+                  label="CEP"
                   name="postal_code"
                   required
                   autoComplete="postal-code"
                   defaultValue={address.postal_code || undefined}
                 />
                 <Input
-                  label="City"
+                  label="Cidade"
                   name="city"
                   required
                   autoComplete="locality"
@@ -172,7 +166,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
                 />
               </div>
               <Input
-                label="Province / State"
+                label="Estado"
                 name="province"
                 autoComplete="address-level1"
                 defaultValue={address.province || undefined}
@@ -185,7 +179,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
                 defaultValue={address.country_code || undefined}
               />
               <Input
-                label="Phone"
+                label="Telefone"
                 name="phone"
                 autoComplete="phone"
                 defaultValue={address.phone || undefined}
@@ -205,9 +199,9 @@ const EditAddress: React.FC<EditAddressProps> = ({
                 onClick={close}
                 className="h-10"
               >
-                Cancel
+                Cancelar
               </Button>
-              <SubmitButton>Save</SubmitButton>
+              <SubmitButton>Salvar</SubmitButton>
             </div>
           </Modal.Footer>
         </form>

@@ -80,7 +80,7 @@ const Title: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { close } = useModal()
 
   return (
-    <Dialog.Title className="flex items-center justify-between">
+    <Dialog.Title className="flex items-center justify-between mb-8">
       <div className="text-large-semi">{children}</div>
       <div>
         <button onClick={close}>

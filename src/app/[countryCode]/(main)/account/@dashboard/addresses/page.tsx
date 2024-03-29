@@ -25,10 +25,11 @@ export default async function Addresses() {
   return (
     <div className="w-full">
       <div className="mb-8 flex flex-col gap-y-4">
-        <h1 className="text-2xl-semi">Shipping Addresses</h1>
+        <h1 className="text-2xl-semi">Endereços de Entrega</h1>
         <p className="text-base-regular">
-          View and update your shipping addresses, you can add as many as you
-          like. Saving your addresses will make them available during checkout.
+          Visualize e atualize seus endereços de remessa, você pode adicionar
+          quantos quiser. Ao salvar seus endereços, eles estarão disponíveis
+          durante o checkout.
         </p>
       </div>
       <AddressBook customer={customer} region={region} />
