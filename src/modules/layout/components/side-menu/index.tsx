@@ -10,7 +10,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CountrySelect from "../country-select"
 
 const SideMenuItems = {
- "Início": "/",
+  Início: "/",
   Loja: "/store",
   Pesquisar: "/search",
   "Minha Conta": "/account",
@@ -73,22 +73,22 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
                       >
                         {moreThanOneRegion && (
                           <>
-                          <CountrySelect
-                            toggleState={toggleState}
-                            regions={regions}
-                          />
-                          <ArrowRightMini
-                          className={clx(
-                            "transition-transform duration-150",
-                            toggleState.state ? "-rotate-90" : ""
-                          )}
-                          />
-                        </>
+                            <CountrySelect
+                              toggleState={toggleState}
+                              regions={regions}
+                            />
+                            <ArrowRightMini
+                              className={clx(
+                                "transition-transform duration-150",
+                                toggleState.state ? "-rotate-90" : ""
+                              )}
+                            />
+                          </>
                         )}
-    
                       </div>
                       <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} LookUp Store. Todos os direitos reservados.
+                        © {new Date().getFullYear()} LookUp Store. Todos os
+                        direitos reservados.
                       </Text>
                     </div>
                   </div>
