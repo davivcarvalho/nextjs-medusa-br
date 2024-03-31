@@ -24,7 +24,6 @@ const Payment = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [cardBrand, setCardBrand] = useState<string | null>(null)
   const [cardComplete, setCardComplete] = useState(false)
   const { paymentMethod, setPaymentMethod } = useStripeContext()
 
