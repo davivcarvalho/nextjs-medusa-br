@@ -186,21 +186,20 @@ export async function setPaymentMethod(providerId: string) {
 
 export async function placeOrder() {
   const cartId = cookies().get("_medusa_cart_id")?.value
-
   if (!cartId) throw new Error("No cartId cookie found")
-
   let cart
-
   try {
     cart = await completeCart(cartId)
     revalidateTag("cart")
   } catch (error: any) {
     throw error
   }
-
   if (cart?.type === "order") {
     cookies().set("_medusa_cart_id", "", { maxAge: -1 })
   }
-
   return cart
+}
+
+export async function purgeCart() {
+  cookies().set("_medusa_cart_id", "", { maxAge: -1 })
 }
