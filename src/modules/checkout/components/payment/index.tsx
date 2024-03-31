@@ -63,6 +63,7 @@ const Payment = ({
   }
 
   const handlePaymentChange = (e: StripePaymentElementChangeEvent) => {
+    if (!e.complete) setPaymentMethod(null)
     if ((e.value.type === "boleto" || e.value.type === "card") && e.complete)
       setPaymentMethod(e.value.type)
 
