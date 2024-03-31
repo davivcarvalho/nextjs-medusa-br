@@ -196,6 +196,15 @@ export const retrieveOrder = cache(async function (id: string) {
     .catch((err) => medusaError(err))
 })
 
+export const retrieveOrderByCartId = cache(async function (id: string) {
+  const headers = getMedusaHeaders(["order"])
+
+  return medusaClient.orders
+    .retrieveByCartId(id, headers)
+    .then(({ order }) => order)
+    .catch((err) => medusaError(err))
+})
+
 // Shipping actions
 export const listShippingMethods = cache(async function listShippingMethods(
   regionId: string,

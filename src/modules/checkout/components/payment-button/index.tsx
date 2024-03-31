@@ -52,7 +52,8 @@ const StripePaymentButton = ({
 
   const stripe = useStripe()
   const elements = useElements()
-  const card = elements?.getElement("card")
+
+  const countryCode = cart.shipping_address?.country_code?.toLowerCase()
 
   const session = cart.payment_session as PaymentSession
 
@@ -60,41 +61,41 @@ const StripePaymentButton = ({
 
   const handlePayment = async () => {
     setSubmitting(true)
-    console.log(paymentMethod)
 
     if (!stripe || !elements || !cart) {
       setSubmitting(false)
       return
     }
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/${countryCode}/order/confirmed/${cart?.id}`,
+        payment_method_data: {
+          billing_details: {
+            name:
+              cart.billing_address.first_name +
+              " " +
+              cart.billing_address.last_name,
+            address: {
+              city: cart.billing_address.city ?? undefined,
+              country: cart.billing_address.country_code ?? undefined,
+              line1: cart.billing_address.address_1 ?? undefined,
+              line2: cart.billing_address.address_2 ?? undefined,
+              postal_code: cart.billing_address.postal_code ?? undefined,
+              state: cart.billing_address.province ?? undefined,
+            },
+            email: cart.email,
+            phone: cart.billing_address.phone ?? undefined,
+          },
+        },
+      },
+    })
 
-    setSubmitting(false)
-
-    // const { error } = await stripe.confirmPayment({
-    //   elements,
-    //   confirmParams: {
-    //     return_url: "if_required",
-    //     payment_method_data: {
-    //       billing_details: {
-    //         name:
-    //           cart.billing_address.first_name +
-    //           " " +
-    //           cart.billing_address.last_name,
-    //         address: {
-    //           city: cart.billing_address.city ?? undefined,
-    //           country: cart.billing_address.country_code ?? undefined,
-    //           line1: cart.billing_address.address_1 ?? undefined,
-    //           line2: cart.billing_address.address_2 ?? undefined,
-    //           postal_code: cart.billing_address.postal_code ?? undefined,
-    //           state: cart.billing_address.province ?? undefined,
-    //         },
-    //         email: cart.email,
-    //         phone: cart.billing_address.phone ?? undefined,
-    //       },
-    //     },
-    //   },
-    // })
-
-    // if (error) setErrorMessage(error.message || "Erro ao processar o pagamento")
+    if (error) {
+      setErrorMessage(error.message || "Erro ao processar o pagamento")
+      setSubmitting(false)
+      return
+    }
 
     // stripe
     //   .retrievePaymentIntent(session.data.client_secret as string)
