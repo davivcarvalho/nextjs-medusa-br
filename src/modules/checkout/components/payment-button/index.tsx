@@ -2,13 +2,11 @@
 
 import { Cart, PaymentSession } from "@medusajs/medusa"
 import { Button } from "@medusajs/ui"
-import { OnApproveActions, OnApproveData } from "@paypal/paypal-js"
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import { placeOrder } from "@modules/checkout/actions"
 import React, { useState } from "react"
 import ErrorMessage from "../error-message"
-import Spinner from "@modules/common/icons/spinner"
+import { useStripeContext } from "../payment-wrapper"
 
 type PaymentButtonProps = {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
@@ -29,12 +27,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ cart }) => {
   switch (paymentSession.provider_id) {
     case "stripe":
       return <StripePaymentButton notReady={notReady} cart={cart} />
-    case "manual":
-      return <ManualTestPaymentButton notReady={notReady} />
-    case "paypal":
-      return <PayPalPaymentButton notReady={notReady} cart={cart} />
     default:
-      return <Button disabled>Select a payment method</Button>
+      return <Button disabled>Selecione um método de pagamento</Button>
   }
 }
 
@@ -47,6 +41,7 @@ const StripePaymentButton = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const { paymentMethod } = useStripeContext()
 
   const onPaymentCompleted = async () => {
     await placeOrder().catch(() => {
@@ -61,62 +56,113 @@ const StripePaymentButton = ({
 
   const session = cart.payment_session as PaymentSession
 
-  const disabled = !stripe || !elements ? true : false
+  const disabled = !stripe || !elements || !paymentMethod
 
   const handlePayment = async () => {
     setSubmitting(true)
+    console.log(paymentMethod)
 
-    if (!stripe || !elements || !card || !cart) {
+    if (!stripe || !elements || !cart) {
       setSubmitting(false)
       return
     }
 
-    await stripe
-      .confirmCardPayment(session.data.client_secret as string, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            name:
-              cart.billing_address.first_name +
-              " " +
-              cart.billing_address.last_name,
-            address: {
-              city: cart.billing_address.city ?? undefined,
-              country: cart.billing_address.country_code ?? undefined,
-              line1: cart.billing_address.address_1 ?? undefined,
-              line2: cart.billing_address.address_2 ?? undefined,
-              postal_code: cart.billing_address.postal_code ?? undefined,
-              state: cart.billing_address.province ?? undefined,
-            },
-            email: cart.email,
-            phone: cart.billing_address.phone ?? undefined,
-          },
-        },
-      })
-      .then(({ error, paymentIntent }) => {
-        if (error) {
-          const pi = error.payment_intent
+    setSubmitting(false)
 
-          if (
-            (pi && pi.status === "requires_capture") ||
-            (pi && pi.status === "succeeded")
-          ) {
-            onPaymentCompleted()
-          }
+    // const { error } = await stripe.confirmPayment({
+    //   elements,
+    //   confirmParams: {
+    //     return_url: "if_required",
+    //     payment_method_data: {
+    //       billing_details: {
+    //         name:
+    //           cart.billing_address.first_name +
+    //           " " +
+    //           cart.billing_address.last_name,
+    //         address: {
+    //           city: cart.billing_address.city ?? undefined,
+    //           country: cart.billing_address.country_code ?? undefined,
+    //           line1: cart.billing_address.address_1 ?? undefined,
+    //           line2: cart.billing_address.address_2 ?? undefined,
+    //           postal_code: cart.billing_address.postal_code ?? undefined,
+    //           state: cart.billing_address.province ?? undefined,
+    //         },
+    //         email: cart.email,
+    //         phone: cart.billing_address.phone ?? undefined,
+    //       },
+    //     },
+    //   },
+    // })
 
-          setErrorMessage(error.message || null)
-          return
-        }
+    // if (error) setErrorMessage(error.message || "Erro ao processar o pagamento")
 
-        if (
-          (paymentIntent && paymentIntent.status === "requires_capture") ||
-          paymentIntent.status === "succeeded"
-        ) {
-          return onPaymentCompleted()
-        }
+    // stripe
+    //   .retrievePaymentIntent(session.data.client_secret as string)
+    //   .then(({ paymentIntent }) => {
+    //     switch (paymentIntent?.status) {
+    //       case "succeeded":
+    //         onPaymentCompleted()
+    //         break
+    //       case "requires_capture":
+    //         onPaymentCompleted()
+    //         break
+    //       case "requires_payment_method":
+    //         setErrorMessage(
+    //           "Your payment was not successful, please try again."
+    //         )
+    //         break
+    //       default:
+    //         setErrorMessage("Something went wrong.")
+    //         break
+    //     }
+    //   })
 
-        return
-      })
+    // await stripe
+    //   .confirmCardPayment(session.data.client_secret as string, {
+    //     payment_method: {
+    //       card: card,
+    //       billing_details: {
+    //         name:
+    //           cart.billing_address.first_name +
+    //           " " +
+    //           cart.billing_address.last_name,
+    //         address: {
+    //           city: cart.billing_address.city ?? undefined,
+    //           country: cart.billing_address.country_code ?? undefined,
+    //           line1: cart.billing_address.address_1 ?? undefined,
+    //           line2: cart.billing_address.address_2 ?? undefined,
+    //           postal_code: cart.billing_address.postal_code ?? undefined,
+    //           state: cart.billing_address.province ?? undefined,
+    //         },
+    //         email: cart.email,
+    //         phone: cart.billing_address.phone ?? undefined,
+    //       },
+    //     },
+    //   })
+    //   .then(({ error, paymentIntent }) => {
+    //     if (error) {
+    //       const pi = error.payment_intent
+
+    //       if (
+    //         (pi && pi.status === "requires_capture") ||
+    //         (pi && pi.status === "succeeded")
+    //       ) {
+    //         onPaymentCompleted()
+    //       }
+
+    //       setErrorMessage(error.message || null)
+    //       return
+    //     }
+
+    //     if (
+    //       (paymentIntent && paymentIntent.status === "requires_capture") ||
+    //       paymentIntent.status === "succeeded"
+    //     ) {
+    //       return onPaymentCompleted()
+    //     }
+
+    //     return
+    //   })
   }
 
   return (
@@ -126,97 +172,6 @@ const StripePaymentButton = ({
         onClick={handlePayment}
         size="large"
         isLoading={submitting}
-      >
-        Finalizar Pedido
-      </Button>
-      <ErrorMessage error={errorMessage} />
-    </>
-  )
-}
-
-const PayPalPaymentButton = ({
-  cart,
-  notReady,
-}: {
-  cart: Omit<Cart, "refundable_amount" | "refunded_total">
-  notReady: boolean
-}) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const onPaymentCompleted = async () => {
-    await placeOrder().catch(() => {
-      setErrorMessage("Ocorreu um erro desconhecido, tente novamente.")
-      setSubmitting(false)
-    })
-  }
-
-  const session = cart.payment_session as PaymentSession
-
-  const handlePayment = async (
-    _data: OnApproveData,
-    actions: OnApproveActions
-  ) => {
-    actions?.order
-      ?.authorize()
-      .then((authorization) => {
-        if (authorization.status !== "COMPLETED") {
-          setErrorMessage(`Ocorreu um erro, status: ${authorization.status}`)
-          return
-        }
-        onPaymentCompleted()
-      })
-      .catch(() => {
-        setErrorMessage(`Ocorreu um erro desconhecido, tente novamente.`)
-        setSubmitting(false)
-      })
-  }
-
-  const [{ isPending, isResolved }] = usePayPalScriptReducer()
-
-  if (isPending) {
-    return <Spinner />
-  }
-
-  if (isResolved) {
-    return (
-      <>
-        <PayPalButtons
-          style={{ layout: "horizontal" }}
-          createOrder={async () => session.data.id as string}
-          onApprove={handlePayment}
-          disabled={notReady || submitting || isPending}
-        />
-        <ErrorMessage error={errorMessage} />
-      </>
-    )
-  }
-}
-
-const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const onPaymentCompleted = async () => {
-    await placeOrder().catch((err) => {
-      setErrorMessage(err.toString())
-      setSubmitting(false)
-    })
-  }
-
-  const handlePayment = () => {
-    setSubmitting(true)
-
-    onPaymentCompleted()
-  }
-
-  return (
-    <>
-      <Button
-        disabled={notReady}
-        isLoading={submitting}
-        onClick={handlePayment}
-        size="large"
       >
         Finalizar Pedido
       </Button>
