@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { Cart } from "@medusajs/medusa"
@@ -12,10 +12,7 @@ import { FaRegNewspaper } from "react-icons/fa6"
 
 import Divider from "@modules/common/components/divider"
 import Spinner from "@modules/common/icons/spinner"
-import {
-  StripeContext,
-  useStripeContext,
-} from "@modules/checkout/components/payment-wrapper"
+import { useStripeContext } from "@modules/checkout/components/payment-wrapper"
 
 const Payment = ({
   cart,
@@ -25,7 +22,7 @@ const Payment = ({
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [cardComplete, setCardComplete] = useState(false)
-  const { paymentMethod, setPaymentMethod } = useStripeContext()
+  const { paymentMethod, setPaymentMethod, stripeReady } = useStripeContext()
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -34,7 +31,6 @@ const Payment = ({
   const isOpen = searchParams.get("step") === "payment"
 
   const isStripe = cart?.payment_session?.provider_id === "stripe"
-  const stripeReady = useContext(StripeContext)
 
   const paymentReady =
     cart?.payment_session && cart?.shipping_methods.length !== 0

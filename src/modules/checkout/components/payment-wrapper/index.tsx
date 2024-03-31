@@ -15,8 +15,11 @@ type WrapperProps = {
 type StripeContextType = {
   paymentMethod: "card" | "boleto" | null
   setPaymentMethod: (value: StripeContextType["paymentMethod"]) => void
+  stripeReady: boolean
 }
-export const StripeContext = createContext({} as StripeContextType)
+export const StripeContext = createContext({
+  stripeReady: false,
+} as StripeContextType)
 
 export const useStripeContext = () => useContext(StripeContext)
 
@@ -37,6 +40,7 @@ const Wrapper: React.FC<WrapperProps> = ({ cart, children }) => {
     return (
       <StripeContext.Provider
         value={{
+          stripeReady: true,
           paymentMethod,
           setPaymentMethod,
         }}
