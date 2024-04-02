@@ -6,6 +6,7 @@ import { useElements, useStripe } from "@stripe/react-stripe-js"
 import React, { useState } from "react"
 import ErrorMessage from "../error-message"
 import { useStripeContext } from "../payment-wrapper"
+import { placeOrder } from "@modules/checkout/actions"
 
 type PaymentButtonProps = {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
@@ -45,8 +46,6 @@ const StripePaymentButton = ({
   const stripe = useStripe()
   const elements = useElements()
 
-  const countryCode = cart.shipping_address?.country_code?.toLowerCase()
-
   const disabled = !stripe || !elements || !paymentMethod
 
   const handlePayment = async () => {
@@ -54,12 +53,13 @@ const StripePaymentButton = ({
 
     if (!stripe || !elements || !cart) {
       setSubmitting(false)
+      setErrorMessage("Falha ao processar o pagamento, tente novamente!")
       return
     }
-    const { error } = await stripe.confirmPayment({
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/${countryCode}/order/confirmed/${cart?.id}`,
         payment_method_data: {
           billing_details: {
             name:
@@ -79,6 +79,7 @@ const StripePaymentButton = ({
           },
         },
       },
+      redirect: "if_required",
     })
 
     if (error) {
@@ -86,6 +87,25 @@ const StripePaymentButton = ({
       setSubmitting(false)
       return
     }
+
+    if (
+      paymentIntent?.status === "succeeded" ||
+      paymentIntent?.status === "requires_capture" ||
+      (paymentIntent?.status === "requires_action" &&
+        paymentMethod === "boleto")
+    ) {
+      try {
+        await placeOrder()
+      } catch (error) {
+        setErrorMessage("Erro ao processar o pedido")
+        setSubmitting(false)
+      }
+
+      return
+    }
+
+    setSubmitting(false)
+    setErrorMessage("Falha ao processar o pagamento, tente novamente!")
   }
 
   return (

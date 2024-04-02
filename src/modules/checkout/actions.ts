@@ -186,18 +186,25 @@ export async function setPaymentMethod(providerId: string) {
 
 export async function placeOrder() {
   const cartId = cookies().get("_medusa_cart_id")?.value
+
   if (!cartId) throw new Error("No cartId cookie found")
+
   let cart
+
   try {
     cart = await completeCart(cartId)
     revalidateTag("cart")
   } catch (error: any) {
     throw error
   }
+
   if (cart?.type === "order") {
+    const countryCode = cart.data.shipping_address?.country_code?.toLowerCase()
     cookies().set("_medusa_cart_id", "", { maxAge: -1 })
+    return redirect(`/${countryCode}/order/confirmed/${cart?.data.id}`)
   }
-  return cart
+
+  throw new Error("Falha ao processar o pedido!")
 }
 
 export async function purgeCart() {

@@ -1,18 +1,12 @@
-"use client"
-
 import { Order } from "@medusajs/medusa"
 import { Heading } from "@medusajs/ui"
 
 import CartTotals from "@modules/common/components/cart-totals"
 import Help from "@modules/order/components/help"
 import Items from "@modules/order/components/items"
-import OnboardingCta from "@modules/order/components/onboarding-cta"
 import OrderDetails from "@modules/order/components/order-details"
 import ShippingDetails from "@modules/order/components/shipping-details"
 import PaymentDetails from "@modules/order/components/payment-details"
-import { useEffect, useState } from "react"
-import { purgeCart } from "@modules/checkout/actions"
-import SkeletonOrderConfirmed from "@modules/skeletons/templates/skeleton-order-confirmed"
 
 type OrderCompletedTemplateProps = {
   order: Order
@@ -21,18 +15,6 @@ type OrderCompletedTemplateProps = {
 export default function OrderCompletedTemplate({
   order,
 }: OrderCompletedTemplateProps) {
-  const [isReady, setIsReady] = useState(false)
-
-  useEffect(() => {
-    ;(async () => {
-      await purgeCart()
-
-      setIsReady(true)
-    })()
-  }, [])
-
-  if (!isReady) return <SkeletonOrderConfirmed />
-
   return (
     <div className="py-6 min-h-[calc(100vh-64px)]">
       <div className="content-container flex flex-col justify-center items-center gap-y-10 max-w-4xl h-full w-full">
