@@ -7,6 +7,7 @@ import React, { useState } from "react"
 import ErrorMessage from "../error-message"
 import { useStripeContext } from "../payment-wrapper"
 import { placeOrder } from "@modules/checkout/actions"
+import { medusaClient } from "@lib/config"
 
 type PaymentButtonProps = {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
@@ -50,6 +51,10 @@ const StripePaymentButton = ({
 
   const handlePayment = async () => {
     setSubmitting(true)
+
+    await medusaClient.carts.update(cart.id, {
+      context: { paymentMethod },
+    })
 
     if (!stripe || !elements || !cart) {
       setSubmitting(false)
