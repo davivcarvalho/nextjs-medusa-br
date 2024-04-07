@@ -14,6 +14,10 @@ export const paymentInfoMap: Record<
     title: "Credit card",
     icon: <CreditCard />,
   },
+  "stripe-custom": {
+    title: "Credit card",
+    icon: <CreditCard />,
+  },
   "stripe-ideal": {
     title: "iDeal",
     icon: <Ideal />,
