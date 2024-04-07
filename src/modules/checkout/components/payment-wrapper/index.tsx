@@ -56,25 +56,6 @@ const Wrapper: React.FC<WrapperProps> = ({ cart, children }) => {
     )
   }
 
-  if (
-    paymentSession?.provider_id === "paypal" &&
-    paypalClientId !== undefined &&
-    cart
-  ) {
-    return (
-      <PayPalScriptProvider
-        options={{
-          "client-id": "test",
-          currency: cart?.region.currency_code.toUpperCase(),
-          intent: "authorize",
-          components: "buttons",
-        }}
-      >
-        {children}
-      </PayPalScriptProvider>
-    )
-  }
-
   return <div>{children}</div>
 }
 

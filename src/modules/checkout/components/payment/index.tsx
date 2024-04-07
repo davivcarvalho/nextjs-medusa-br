@@ -30,7 +30,7 @@ const Payment = ({
 
   const isOpen = searchParams.get("step") === "payment"
 
-  const isStripe = cart?.payment_session?.provider_id === "stripe"
+  const isStripe = cart?.payment_session?.provider_id === "stripe-custom"
 
   const paymentReady =
     cart?.payment_session && cart?.shipping_methods.length !== 0
