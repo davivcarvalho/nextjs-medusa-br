@@ -26,7 +26,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ cart }) => {
   const paymentSession = cart.payment_session as PaymentSession
 
   switch (paymentSession.provider_id) {
-    case "stripe":
+    case "stripe-custom":
       return <StripePaymentButton notReady={notReady} cart={cart} />
     default:
       return <Button disabled>Selecione um método de pagamento</Button>
